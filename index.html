@@ -423,6 +423,16 @@
 
         function placeBet(type) {
             if (isRunning) return;
+
+            // 一旦開始押注，立即停止上一局的中獎閃爍特效
+            document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('win-blink'));
+            document.getElementById('win-display').classList.remove('win-blink');
+            document.getElementById('win-display').innerText = '0';
+            if (document.getElementById('main-screen').innerText === 'WIN!' ||
+                document.getElementById('main-screen').innerText === 'LOSE') {
+                document.getElementById('main-screen').innerText = 'READY';
+            }
+
             if (credits >= 10) {
                 bets[type] += 10;
                 credits -= 10; // 正確扣分
