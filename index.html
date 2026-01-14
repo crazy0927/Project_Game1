@@ -2,468 +2,507 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>經典小瑪莉 - 復古麻仔台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>經典小瑪莉 - 支援手機與電腦</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
+        :root {
+            --bg-color: #1a1a1a;
+            --panel-bg: #2d2d2d;
+            --neon-red: #ff3131;
+            --neon-yellow: #f8ff00;
+        }
+
         body {
-            background-color: #1a1a1a;
+            background-color: var(--bg-color);
             font-family: 'Orbitron', sans-serif;
             user-select: none;
             touch-action: manipulation;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .game-wrapper {
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
         }
 
         .game-container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: #2d2d2d;
-            border: 8px solid #444;
-            border-radius: 15px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.8);
-            padding: 15px;
+            width: 100%;
+            max-width: 480px;
+            background: var(--panel-bg);
+            border: 6px solid #444;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+            padding: 12px;
+            position: relative;
         }
 
-        /* 跑燈格子 */
+        /* 跑燈格子佈局優化 */
         .slot-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             grid-template-rows: repeat(5, 1fr);
             gap: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .slot-item {
             aspect-ratio: 1;
-            background: #333;
-            border: 2px solid #555;
+            background: #222;
+            border: 1px solid #444;
             border-radius: 4px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            color: #ccc;
-            position: relative;
-            transition: all 0.1s;
+            font-size: 0.6rem;
+            color: #888;
+            transition: all 0.05s;
         }
 
         .slot-item.active {
-            background: #ffff00;
-            border-color: #ff0000;
-            box-shadow: 0 0 15px #ffff00;
-            transform: scale(1.05);
+            background: var(--neon-yellow);
+            border-color: #fff;
+            box-shadow: 0 0 15px var(--neon-yellow);
             z-index: 10;
         }
 
         .slot-item.active .symbol {
-            transform: scale(1.2);
             color: #000;
+            transform: scale(1.1);
         }
 
         .symbol {
-            font-size: 1.5rem;
-            margin-bottom: 2px;
+            font-size: clamp(1rem, 4vw, 1.4rem);
         }
 
         .multiplier {
-            font-size: 0.6rem;
+            font-size: 0.5rem;
             color: #ffcc00;
         }
 
-        /* 中間控制區域 */
+        /* 控制中心 */
         .center-panel {
             grid-column: 2 / 7;
             grid-row: 2 / 5;
-            background: #111;
-            border: 2px inset #444;
+            background: #000;
+            border: 2px solid #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
-            color: #0f0;
-            text-shadow: 0 0 5px #0f0;
+            padding: 5px;
+            border-radius: 8px;
         }
 
         .display-screen {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            background: #000;
-            padding: 5px 20px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            min-width: 150px;
+            font-size: 1.5rem;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            background: #050505;
+            padding: 5px 10px;
+            border-radius: 4px;
+            width: 90%;
+            max-width: 140px;
             text-align: center;
+            border: 1px solid #1a1a1a;
         }
 
-        /* 押注區 */
+        /* 押注按鈕區 */
         .bet-area {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         .bet-button {
-            background: linear-gradient(145deg, #444, #222);
-            border: 2px solid #666;
-            border-radius: 8px;
-            padding: 8px;
+            background: linear-gradient(145deg, #3a3a3a, #222);
+            border: 2px solid #555;
+            border-radius: 10px;
+            padding: 8px 2px;
             text-align: center;
             cursor: pointer;
-            transition: active 0.1s;
-        }
-
-        .bet-button:active {
-            transform: translateY(2px);
-            background: #555;
-        }
-
-        .bet-button.has-bet {
-            border-color: #ff00ff;
-            box-shadow: 0 0 5px #ff00ff;
-        }
-
-        .bet-count {
-            color: #ff00ff;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        /* 按鈕特效 */
-        .btn-primary {
-            background: linear-gradient(to bottom, #ff4d4d, #990000);
-            box-shadow: 0 4px 0 #660000;
             transition: all 0.1s;
         }
 
-        .btn-primary:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #660000;
+        .bet-button:active {
+            transform: scale(0.95);
+            background: #444;
         }
 
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: 0 4px 0 #660000 !important;
+        .bet-button.has-bet {
+            border-color: #00f2ff;
+            box-shadow: 0 0 8px rgba(0,242,255,0.4);
         }
 
-        .neon-text {
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        .bet-count {
+            color: #00f2ff;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* 主要大按鈕 */
+        .main-btn {
+            border-bottom: 4px solid rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+
+        .main-btn:active {
+            transform: translateY(2px);
+            border-bottom: 0px solid transparent;
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 10px var(--neon-red);
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.2; }
         }
 
         .win-blink {
-            animation: blink 0.2s infinite;
+            animation: blink 0.15s infinite;
+        }
+
+        .settings-panel {
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+            color: #aaa;
+            width: 100%;
+        }
+
+        select {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 2px 5px;
+            outline: none;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body>
 
-    <div class="game-container w-full">
-        <!-- 頂部資訊列 -->
-        <div class="flex justify-between items-center mb-4 px-2 text-white">
-            <div class="bg-black p-2 rounded border border-gray-700">
-                <span class="text-xs text-gray-400 block">總分 CREDITS</span>
-                <span id="total-credits" class="text-xl text-yellow-400">1000</span>
+<div class="game-wrapper">
+    <div class="game-container">
+        <!-- 頂部資訊 -->
+        <div class="flex justify-between items-center mb-3 text-white px-1">
+            <div class="text-left">
+                <div class="text-[10px] text-gray-500">CREDITS</div>
+                <div id="total-credits" class="text-xl font-bold text-yellow-400">1000</div>
             </div>
-            <h1 class="text-2xl font-bold text-red-500 italic neon-text">小瑪莉</h1>
-            <div class="bg-black p-2 rounded border border-gray-700">
-                <span class="text-xs text-gray-400 block">本次得分 WIN</span>
-                <span id="win-display" class="text-xl text-green-400">0</span>
+            <h1 class="text-lg font-bold text-red-500 italic neon-glow">LITTLE MARY</h1>
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">WIN</div>
+                <div id="win-display" class="text-xl font-bold text-green-400">0</div>
             </div>
         </div>
 
-        <!-- 跑燈格字區域 -->
+        <!-- 音效選擇 -->
+        <div class="settings-panel flex justify-between items-center">
+            <span>音效模式：</span>
+            <select id="sound-mode" onchange="changeSoundMode()">
+                <option value="classic">經典復古 (Classic)</option>
+                <option value="modern">現代電子 (Modern)</option>
+                <option value="bass">重低音 (Deep Bass)</option>
+            </select>
+        </div>
+
+        <!-- 遊戲跑燈區 -->
         <div id="slot-grid" class="slot-grid">
-            <!-- 由 JS 生成 -->
+            <!-- JS 生成 -->
         </div>
 
-        <!-- 押注控制區 -->
-        <div class="bet-area mb-6">
+        <!-- 押注區 -->
+        <div class="bet-area">
             <div onclick="placeBet('BAR')" class="bet-button">
-                <div class="text-xs text-gray-400">BAR</div>
-                <div class="text-lg">🏆</div>
+                <div class="symbol">🏆</div>
                 <div id="bet-BAR" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x100</div>
+                <div class="multiplier">x100</div>
             </div>
             <div onclick="placeBet('77')" class="bet-button">
-                <div class="text-xs text-gray-400">77</div>
-                <div class="text-lg">💎</div>
+                <div class="symbol">💎</div>
                 <div id="bet-77" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x40</div>
+                <div class="multiplier">x40</div>
             </div>
             <div onclick="placeBet('STAR')" class="bet-button">
-                <div class="text-xs text-gray-400">星星</div>
-                <div class="text-lg">⭐</div>
+                <div class="symbol">⭐</div>
                 <div id="bet-STAR" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x30</div>
+                <div class="multiplier">x30</div>
             </div>
             <div onclick="placeBet('MELON')" class="bet-button">
-                <div class="text-xs text-gray-400">西瓜</div>
-                <div class="text-lg">🍉</div>
+                <div class="symbol">🍉</div>
                 <div id="bet-MELON" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x20</div>
+                <div class="multiplier">x20</div>
             </div>
             <div onclick="placeBet('BELL')" class="bet-button">
-                <div class="text-xs text-gray-400">鈴鐺</div>
-                <div class="text-lg">🔔</div>
+                <div class="symbol">🔔</div>
                 <div id="bet-BELL" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x20</div>
+                <div class="multiplier">x20</div>
             </div>
             <div onclick="placeBet('LEMON')" class="bet-button">
-                <div class="text-xs text-gray-400">檸檬</div>
-                <div class="text-lg">🍋</div>
+                <div class="symbol">🍋</div>
                 <div id="bet-LEMON" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x15</div>
+                <div class="multiplier">x15</div>
             </div>
             <div onclick="placeBet('ORANGE')" class="bet-button">
-                <div class="text-xs text-gray-400">橘子</div>
-                <div class="text-lg">🍊</div>
+                <div class="symbol">🍊</div>
                 <div id="bet-ORANGE" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x10</div>
+                <div class="multiplier">x10</div>
             </div>
             <div onclick="placeBet('CHERRY')" class="bet-button">
-                <div class="text-xs text-gray-400">櫻桃</div>
-                <div class="text-lg">🍒</div>
+                <div class="symbol">🍒</div>
                 <div id="bet-CHERRY" class="bet-count">0</div>
-                <div class="text-[10px] text-yellow-500">x5</div>
+                <div class="multiplier">x5</div>
             </div>
         </div>
 
-        <!-- 主要按鈕 -->
+        <!-- 主操作 -->
         <div class="flex gap-4">
-            <button id="clear-btn" onclick="clearBets()" class="flex-1 py-4 bg-gray-600 rounded-lg text-white font-bold border-b-4 border-gray-800 active:transform active:translate-y-1 active:border-b-0">
-                清除押注
+            <button id="clear-btn" onclick="clearBets()" class="flex-1 py-3 bg-gray-700 text-white rounded-xl font-bold main-btn">
+                清除
             </button>
-            <button id="start-btn" onclick="startGame()" class="flex-[2] py-4 btn-primary rounded-lg text-white text-2xl font-bold">
+            <button id="start-btn" onclick="startGame()" class="flex-[2] py-3 bg-red-600 text-white rounded-xl text-xl font-bold main-btn">
                 啟動 START
             </button>
         </div>
+
+        <div class="text-[9px] text-gray-500 text-center mt-3">
+            手機建議橫屏或縮放 | 純屬娛樂無實金錢交易
+        </div>
     </div>
+</div>
 
-    <p class="text-gray-500 text-xs mt-4 text-center">
-        提示：點擊圖案進行押注，押滿後按下啟動！<br>
-        本遊戲僅供娛樂，無真實金錢交易。
-    </p>
+<script>
+    const items = [
+        { id: 0, type: 'BAR', sym: '🏆', multi: 100 },
+        { id: 1, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 2, type: 'ORANGE', sym: '🍊', multi: 10 },
+        { id: 3, type: 'LEMON', sym: '🍋', multi: 15 },
+        { id: 4, type: '77', sym: '💎', multi: 40 },
+        { id: 5, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 6, type: 'ORANGE', sym: '🍊', multi: 10 },
+        { id: 7, type: 'BELL', sym: '🔔', multi: 20 },
+        { id: 8, type: 'STAR', sym: '⭐', multi: 30 },
+        { id: 9, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 10, type: 'MELON', sym: '🍉', multi: 20 },
+        { id: 11, type: 'BELL', sym: '🔔', multi: 20 },
+        { id: 12, type: 'BAR', sym: '🏆', multi: 50 },
+        { id: 13, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 14, type: 'ORANGE', sym: '🍊', multi: 10 },
+        { id: 15, type: 'LEMON', sym: '🍋', multi: 15 },
+        { id: 16, type: '77', sym: '💎', multi: 40 },
+        { id: 17, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 18, type: 'ORANGE', sym: '🍊', multi: 10 },
+        { id: 19, type: 'BELL', sym: '🔔', multi: 20 },
+        { id: 20, type: 'STAR', sym: '⭐', multi: 30 },
+        { id: 21, type: 'CHERRY', sym: '🍒', multi: 5 },
+        { id: 22, type: 'MELON', sym: '🍉', multi: 20 },
+        { id: 23, type: 'LEMON', sym: '🍋', multi: 15 }
+    ];
 
-    <script>
-        // 遊戲設定
-        const items = [
-            { id: 0, type: 'BAR', sym: '🏆', multi: 100 },
-            { id: 1, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 2, type: 'ORANGE', sym: '🍊', multi: 10 },
-            { id: 3, type: 'LEMON', sym: '🍋', multi: 15 },
-            { id: 4, type: '77', sym: '💎', multi: 40 },
-            { id: 5, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 6, type: 'ORANGE', sym: '🍊', multi: 10 },
-            { id: 7, type: 'BELL', sym: '🔔', multi: 20 },
-            { id: 8, type: 'STAR', sym: '⭐', multi: 30 },
-            { id: 9, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 10, type: 'MELON', sym: '🍉', multi: 20 },
-            { id: 11, type: 'BELL', sym: '🔔', multi: 20 },
-            { id: 12, type: 'BAR', sym: '🏆', multi: 50 },
-            { id: 13, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 14, type: 'ORANGE', sym: '🍊', multi: 10 },
-            { id: 15, type: 'LEMON', sym: '🍋', multi: 15 },
-            { id: 16, type: '77', sym: '💎', multi: 40 },
-            { id: 17, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 18, type: 'ORANGE', sym: '🍊', multi: 10 },
-            { id: 19, type: 'BELL', sym: '🔔', multi: 20 },
-            { id: 20, type: 'STAR', sym: '⭐', multi: 30 },
-            { id: 21, type: 'CHERRY', sym: '🍒', multi: 5 },
-            { id: 22, type: 'MELON', sym: '🍉', multi: 20 },
-            { id: 23, type: 'LEMON', sym: '🍋', multi: 15 }
-        ];
+    const gridLayout = [
+        0, 1, 2, 3, 4, 5, 6,
+        23, -1, -1, -1, -1, -1, 7,
+        22, -1, -1, -1, -1, -1, 8,
+        21, -1, -1, -1, -1, -1, 9,
+        20, 19, 18, 17, 16, 15, 14
+    ];
 
-        // 映射路徑 (外圍一圈)
-        const pathOrder = [
-            0, 1, 2, 3, 4, 5, 6,
-            13, 20, 27, 34,
-            33, 32, 31, 30, 29, 28,
-            21, 14, 7
-        ];
-        // 實際上我們需要 24 格，這裡手動調整佈局
-        const gridLayout = [
-            0, 1, 2, 3, 4, 5, 6,
-            23, -1, -1, -1, -1, -1, 7,
-            22, -1, -1, -1, -1, -1, 8,
-            21, -1, -1, -1, -1, -1, 9,
-            20, 19, 18, 17, 16, 15, 14
-        ];
+    let credits = 1000;
+    let bets = { BAR: 0, '77': 0, STAR: 0, MELON: 0, BELL: 0, LEMON: 0, ORANGE: 0, CHERRY: 0 };
+    let currentIndex = 0;
+    let isRunning = false;
+    let audioCtx = null;
 
-        // 狀態變數
-        let credits = 1000;
-        let bets = { BAR: 0, '77': 0, STAR: 0, MELON: 0, BELL: 0, LEMON: 0, ORANGE: 0, CHERRY: 0 };
-        let currentIndex = 0;
-        let isRunning = false;
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
 
-        // 音效合成器 (簡單的 Beep 聲)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, duration) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+    function playEffect(type) {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const mode = document.getElementById('sound-mode').value;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        let freq = 440;
+        let duration = 0.1;
+        let wave = 'square';
+
+        if (type === 'tick') {
+            if (mode === 'classic') { freq = 800; wave = 'square'; duration = 0.05; }
+            else if (mode === 'modern') { freq = 1200; wave = 'sine'; duration = 0.03; }
+            else { freq = 150; wave = 'sawtooth'; duration = 0.08; }
+        } else if (type === 'win') {
+            freq = 1500; wave = 'triangle'; duration = 0.6;
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + 0.5);
+        } else if (type === 'bet') {
+            freq = mode === 'bass' ? 300 : 700; wave = 'sine'; duration = 0.05;
         }
 
-        // 初始化格字
-        function initGrid() {
-            const gridEl = document.getElementById('slot-grid');
-            gridEl.innerHTML = '';
-            
-            gridLayout.forEach((val, index) => {
-                if (val === -1) {
-                    // 中間區域
-                    if (index === 8) {
-                        const panel = document.createElement('div');
-                        panel.className = 'center-panel';
-                        panel.style.gridColumn = 'span 5';
-                        panel.style.gridRow = 'span 3';
-                        panel.innerHTML = `
-                            <div class="text-xs text-gray-500 mb-1">GOOD LUCK</div>
-                            <div id="main-screen" class="display-screen">READY</div>
-                            <div class="text-[10px] text-gray-600">ARCADE MACHINE</div>
-                        `;
-                        gridEl.appendChild(panel);
-                    }
-                } else {
-                    const item = items[val];
-                    const div = document.createElement('div');
-                    div.id = `slot-${val}`;
-                    div.className = 'slot-item';
-                    div.innerHTML = `
-                        <span class="symbol">${item.sym}</span>
-                        <span class="multiplier">x${item.multi}</span>
+        osc.type = wave;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function changeSoundMode() {
+        playEffect('tick');
+    }
+
+    function initGrid() {
+        const gridEl = document.getElementById('slot-grid');
+        gridEl.innerHTML = '';
+        gridLayout.forEach((val, idx) => {
+            if (val === -1) {
+                if (idx === 8) {
+                    const center = document.createElement('div');
+                    center.className = 'center-panel';
+                    center.style.gridColumn = 'span 5';
+                    center.style.gridRow = 'span 3';
+                    center.innerHTML = `
+                        <div class="text-[8px] text-gray-400 mb-1">STATION</div>
+                        <div id="main-screen" class="display-screen">READY</div>
+                        <div class="text-[8px] text-gray-500 mt-1">LUCK X MACHINE</div>
                     `;
-                    gridEl.appendChild(div);
+                    gridEl.appendChild(center);
                 }
-            });
-            updateActiveSlot();
-        }
-
-        function updateActiveSlot() {
-            document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('active', 'win-blink'));
-            const active = document.getElementById(`slot-${currentIndex}`);
-            if (active) active.classList.add('active');
-        }
-
-        function placeBet(type) {
-            if (isRunning) return;
-            if (credits > 0) {
-                bets[type] += 10;
-                credits -= 10;
-                updateUI();
-                playSound(440, 0.05);
+            } else {
+                const item = items[val];
+                const div = document.createElement('div');
+                div.id = `slot-${val}`;
+                div.className = 'slot-item';
+                div.innerHTML = `
+                    <span class="symbol">${item.sym}</span>
+                    <span class="multiplier">x${item.multi}</span>
+                `;
+                gridEl.appendChild(div);
             }
-        }
+        });
+        updateActiveSlot();
+    }
 
-        function clearBets() {
-            if (isRunning) return;
-            for (let key in bets) {
-                credits += bets[key];
-                bets[key] = 0;
-            }
+    function updateActiveSlot() {
+        document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('active', 'win-blink'));
+        const active = document.getElementById(`slot-${currentIndex}`);
+        if (active) active.classList.add('active');
+    }
+
+    function placeBet(type) {
+        if (isRunning) return;
+        if (credits >= 10) {
+            bets[type] += 10;
+            credits -= 10; // 正確扣分
             updateUI();
+            playEffect('bet');
+        } else {
+            document.getElementById('main-screen').innerText = 'LOW PT';
+            setTimeout(() => { if(!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 1000);
         }
+    }
 
-        function updateUI() {
-            document.getElementById('total-credits').innerText = credits;
-            for (let key in bets) {
-                const el = document.getElementById(`bet-${key}`);
+    function clearBets() {
+        if (isRunning) return;
+        for (let key in bets) {
+            credits += bets[key]; // 清除時退回分數
+            bets[key] = 0;
+        }
+        updateUI();
+        playEffect('tick');
+    }
+
+    function updateUI() {
+        document.getElementById('total-credits').innerText = credits;
+        for (let key in bets) {
+            const el = document.getElementById(`bet-${key}`);
+            if (el) {
                 el.innerText = bets[key];
                 el.parentElement.classList.toggle('has-bet', bets[key] > 0);
             }
         }
+    }
 
-        function startGame() {
-            if (isRunning) return;
-            
-            const totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
-            if (totalBet === 0) {
-                document.getElementById('main-screen').innerText = 'NO BET';
-                setTimeout(() => document.getElementById('main-screen').innerText = 'READY', 1000);
-                return;
-            }
-
-            isRunning = true;
-            document.getElementById('start-btn').disabled = true;
-            document.getElementById('win-display').innerText = '0';
-            document.getElementById('win-display').classList.remove('win-blink');
-            
-            // 決定終點 (隨機權重稍後可加，現在先純隨機)
-            const steps = 50 + Math.floor(Math.random() * 50);
-            let currentStep = 0;
-            let speed = 50;
-
-            function spin() {
-                currentIndex = (currentIndex + 1) % 24;
-                updateActiveSlot();
-                playSound(880, 0.02);
-
-                currentStep++;
-                
-                if (currentStep < steps) {
-                    // 控制速度：加速、等速、減速
-                    if (currentStep > steps - 15) {
-                        speed += 30; // 減速
-                    } else if (speed > 50) {
-                        speed -= 5; // 加速
-                    }
-                    setTimeout(spin, speed);
-                } else {
-                    finishGame();
-                }
-            }
-            spin();
+    function startGame() {
+        if (isRunning) return;
+        const totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
+        if (totalBet === 0) {
+            document.getElementById('main-screen').innerText = 'NO BET';
+            return;
         }
 
-        function finishGame() {
-            isRunning = false;
-            document.getElementById('start-btn').disabled = false;
-            
-            const winningItem = items[currentIndex];
-            const winAmount = bets[winningItem.type] * winningItem.multi;
-            
-            if (winAmount > 0) {
-                credits += winAmount;
-                document.getElementById('win-display').innerText = winAmount;
-                document.getElementById('win-display').classList.add('win-blink');
-                document.getElementById(`slot-${currentIndex}`).classList.add('win-blink');
-                document.getElementById('main-screen').innerText = 'WINNER!';
-                
-                // 大獎音效
-                let i = 0;
-                const winInterval = setInterval(() => {
-                    playSound(1000 + (i % 5) * 200, 0.1);
-                    i++;
-                    if (i > 10) clearInterval(winInterval);
-                }, 100);
+        isRunning = true;
+        document.getElementById('start-btn').disabled = true;
+        document.getElementById('win-display').innerText = '0';
+        document.getElementById('win-display').classList.remove('win-blink');
+        document.getElementById('main-screen').innerText = 'SPIN...';
+
+        const steps = 60 + Math.floor(Math.random() * 40);
+        let currentStep = 0;
+        let speed = 50;
+
+        function scroll() {
+            currentIndex = (currentIndex + 1) % 24;
+            updateActiveSlot();
+            playEffect('tick');
+            currentStep++;
+
+            if (currentStep < steps) {
+                if (currentStep > steps - 15) speed += 30; // 減速
+                setTimeout(scroll, speed);
             } else {
-                document.getElementById('main-screen').innerText = 'TRY AGAIN';
-                playSound(200, 0.3);
+                finishGame();
             }
-            
-            updateUI();
         }
+        scroll();
+    }
 
-        // 初始化
-        window.onload = () => {
-            initGrid();
-            updateUI();
-        };
+    function finishGame() {
+        isRunning = false;
+        document.getElementById('start-btn').disabled = false;
+        
+        const winningItem = items[currentIndex];
+        const winAmount = bets[winningItem.type] * winningItem.multi;
+        
+        if (winAmount > 0) {
+            credits += winAmount; // 正確加分
+            document.getElementById('win-display').innerText = winAmount;
+            document.getElementById('win-display').classList.add('win-blink');
+            document.getElementById(`slot-${currentIndex}`).classList.add('win-blink');
+            document.getElementById('main-screen').innerText = 'WIN!';
+            playEffect('win');
+        } else {
+            document.getElementById('main-screen').innerText = 'LOSE';
+            setTimeout(() => { if(!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 2000);
+        }
+        
+        updateUI();
+    }
 
-    </script>
+    window.onload = () => {
+        initGrid();
+        updateUI();
+    };
+</script>
+
 </body>
 </html>
