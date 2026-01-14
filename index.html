@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -42,7 +43,7 @@
             background: var(--panel-bg);
             border: 6px solid #444;
             border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.5);
             padding: 12px;
             position: relative;
         }
@@ -143,7 +144,7 @@
 
         .bet-button.has-bet {
             border-color: #00f2ff;
-            box-shadow: 0 0 8px rgba(0,242,255,0.4);
+            box-shadow: 0 0 8px rgba(0, 242, 255, 0.4);
         }
 
         .bet-count {
@@ -154,7 +155,7 @@
 
         /* 主要大按鈕 */
         .main-btn {
-            border-bottom: 4px solid rgba(0,0,0,0.5);
+            border-bottom: 4px solid rgba(0, 0, 0, 0.5);
             transition: all 0.1s;
         }
 
@@ -168,7 +169,9 @@
         }
 
         @keyframes blink {
-            50% { opacity: 0.2; }
+            50% {
+                opacity: 0.2;
+            }
         }
 
         .win-blink {
@@ -176,7 +179,7 @@
         }
 
         .settings-panel {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 8px;
             border-radius: 10px;
             margin-bottom: 10px;
@@ -195,314 +198,322 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="game-wrapper">
-    <div class="game-container">
-        <!-- 頂部資訊 -->
-        <div class="flex justify-between items-center mb-3 text-white px-1">
-            <div class="text-left">
-                <div class="text-[10px] text-gray-500">CREDITS</div>
-                <div id="total-credits" class="text-xl font-bold text-yellow-400">1000</div>
+    <div class="game-wrapper">
+        <div class="game-container">
+            <!-- 頂部資訊 -->
+            <div class="flex justify-between items-center mb-3 text-white px-1">
+                <div class="text-left">
+                    <div class="text-[10px] text-gray-500">CREDITS</div>
+                    <div id="total-credits" class="text-xl font-bold text-yellow-400">1000</div>
+                </div>
+                <h1 class="text-lg font-bold text-red-500 italic neon-glow">LITTLE MARY</h1>
+                <div class="text-right">
+                    <div class="text-[10px] text-gray-500">WIN</div>
+                    <div id="win-display" class="text-xl font-bold text-green-400">0</div>
+                </div>
             </div>
-            <h1 class="text-lg font-bold text-red-500 italic neon-glow">LITTLE MARY</h1>
-            <div class="text-right">
-                <div class="text-[10px] text-gray-500">WIN</div>
-                <div id="win-display" class="text-xl font-bold text-green-400">0</div>
-            </div>
-        </div>
 
-        <!-- 音效選擇 -->
-        <div class="settings-panel flex justify-between items-center">
-            <span>音效模式：</span>
-            <select id="sound-mode" onchange="changeSoundMode()">
-                <option value="classic">經典復古 (Classic)</option>
-                <option value="modern">現代電子 (Modern)</option>
-                <option value="bass">重低音 (Deep Bass)</option>
-            </select>
-        </div>
+            <!-- 音效選擇 -->
+            <div class="settings-panel flex justify-between items-center">
+                <span>音效模式：</span>
+                <select id="sound-mode" onchange="changeSoundMode()">
+                    <option value="classic">經典復古 (Classic)</option>
+                    <option value="modern">現代電子 (Modern)</option>
+                    <option value="bass">重低音 (Deep Bass)</option>
+                </select>
+            </div>
 
-        <!-- 遊戲跑燈區 -->
-        <div id="slot-grid" class="slot-grid">
-            <!-- JS 生成 -->
-        </div>
+            <!-- 遊戲跑燈區 -->
+            <div id="slot-grid" class="slot-grid">
+                <!-- JS 生成 -->
+            </div>
 
-        <!-- 押注區 -->
-        <div class="bet-area">
-            <div onclick="placeBet('BAR')" class="bet-button">
-                <div class="symbol">🏆</div>
-                <div id="bet-BAR" class="bet-count">0</div>
-                <div class="multiplier">x100</div>
+            <!-- 押注區 -->
+            <div class="bet-area">
+                <div onclick="placeBet('BAR')" class="bet-button">
+                    <div class="symbol">🏆</div>
+                    <div id="bet-BAR" class="bet-count">0</div>
+                    <div class="multiplier">x100</div>
+                </div>
+                <div onclick="placeBet('77')" class="bet-button">
+                    <div class="symbol">💎</div>
+                    <div id="bet-77" class="bet-count">0</div>
+                    <div class="multiplier">x40</div>
+                </div>
+                <div onclick="placeBet('STAR')" class="bet-button">
+                    <div class="symbol">⭐</div>
+                    <div id="bet-STAR" class="bet-count">0</div>
+                    <div class="multiplier">x30</div>
+                </div>
+                <div onclick="placeBet('MELON')" class="bet-button">
+                    <div class="symbol">🍉</div>
+                    <div id="bet-MELON" class="bet-count">0</div>
+                    <div class="multiplier">x20</div>
+                </div>
+                <div onclick="placeBet('BELL')" class="bet-button">
+                    <div class="symbol">🔔</div>
+                    <div id="bet-BELL" class="bet-count">0</div>
+                    <div class="multiplier">x20</div>
+                </div>
+                <div onclick="placeBet('LEMON')" class="bet-button">
+                    <div class="symbol">🍋</div>
+                    <div id="bet-LEMON" class="bet-count">0</div>
+                    <div class="multiplier">x15</div>
+                </div>
+                <div onclick="placeBet('ORANGE')" class="bet-button">
+                    <div class="symbol">🍊</div>
+                    <div id="bet-ORANGE" class="bet-count">0</div>
+                    <div class="multiplier">x10</div>
+                </div>
+                <div onclick="placeBet('CHERRY')" class="bet-button">
+                    <div class="symbol">🍒</div>
+                    <div id="bet-CHERRY" class="bet-count">0</div>
+                    <div class="multiplier">x5</div>
+                </div>
             </div>
-            <div onclick="placeBet('77')" class="bet-button">
-                <div class="symbol">💎</div>
-                <div id="bet-77" class="bet-count">0</div>
-                <div class="multiplier">x40</div>
-            </div>
-            <div onclick="placeBet('STAR')" class="bet-button">
-                <div class="symbol">⭐</div>
-                <div id="bet-STAR" class="bet-count">0</div>
-                <div class="multiplier">x30</div>
-            </div>
-            <div onclick="placeBet('MELON')" class="bet-button">
-                <div class="symbol">🍉</div>
-                <div id="bet-MELON" class="bet-count">0</div>
-                <div class="multiplier">x20</div>
-            </div>
-            <div onclick="placeBet('BELL')" class="bet-button">
-                <div class="symbol">🔔</div>
-                <div id="bet-BELL" class="bet-count">0</div>
-                <div class="multiplier">x20</div>
-            </div>
-            <div onclick="placeBet('LEMON')" class="bet-button">
-                <div class="symbol">🍋</div>
-                <div id="bet-LEMON" class="bet-count">0</div>
-                <div class="multiplier">x15</div>
-            </div>
-            <div onclick="placeBet('ORANGE')" class="bet-button">
-                <div class="symbol">🍊</div>
-                <div id="bet-ORANGE" class="bet-count">0</div>
-                <div class="multiplier">x10</div>
-            </div>
-            <div onclick="placeBet('CHERRY')" class="bet-button">
-                <div class="symbol">🍒</div>
-                <div id="bet-CHERRY" class="bet-count">0</div>
-                <div class="multiplier">x5</div>
-            </div>
-        </div>
 
-        <!-- 主操作 -->
-        <div class="flex gap-4">
-            <button id="clear-btn" onclick="clearBets()" class="flex-1 py-3 bg-gray-700 text-white rounded-xl font-bold main-btn">
-                清除
-            </button>
-            <button id="start-btn" onclick="startGame()" class="flex-[2] py-3 bg-red-600 text-white rounded-xl text-xl font-bold main-btn">
-                啟動 START
-            </button>
-        </div>
+            <!-- 主操作 -->
+            <div class="flex gap-4">
+                <button id="clear-btn" onclick="clearBets()"
+                    class="flex-1 py-3 bg-gray-700 text-white rounded-xl font-bold main-btn">
+                    清除
+                </button>
+                <button id="start-btn" onclick="startGame()"
+                    class="flex-[2] py-3 bg-red-600 text-white rounded-xl text-xl font-bold main-btn">
+                    啟動 START
+                </button>
+            </div>
 
-        <div class="text-[9px] text-gray-500 text-center mt-3">
-            手機建議橫屏或縮放 | 純屬娛樂無實金錢交易
+            <div class="text-[9px] text-gray-500 text-center mt-3">
+                手機建議橫屏或縮放 | 純屬娛樂無實金錢交易
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const items = [
-        { id: 0, type: 'BAR', sym: '🏆', multi: 100 },
-        { id: 1, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 2, type: 'ORANGE', sym: '🍊', multi: 10 },
-        { id: 3, type: 'LEMON', sym: '🍋', multi: 15 },
-        { id: 4, type: '77', sym: '💎', multi: 40 },
-        { id: 5, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 6, type: 'ORANGE', sym: '🍊', multi: 10 },
-        { id: 7, type: 'BELL', sym: '🔔', multi: 20 },
-        { id: 8, type: 'STAR', sym: '⭐', multi: 30 },
-        { id: 9, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 10, type: 'MELON', sym: '🍉', multi: 20 },
-        { id: 11, type: 'BELL', sym: '🔔', multi: 20 },
-        { id: 12, type: 'BAR', sym: '🏆', multi: 50 },
-        { id: 13, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 14, type: 'ORANGE', sym: '🍊', multi: 10 },
-        { id: 15, type: 'LEMON', sym: '🍋', multi: 15 },
-        { id: 16, type: '77', sym: '💎', multi: 40 },
-        { id: 17, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 18, type: 'ORANGE', sym: '🍊', multi: 10 },
-        { id: 19, type: 'BELL', sym: '🔔', multi: 20 },
-        { id: 20, type: 'STAR', sym: '⭐', multi: 30 },
-        { id: 21, type: 'CHERRY', sym: '🍒', multi: 5 },
-        { id: 22, type: 'MELON', sym: '🍉', multi: 20 },
-        { id: 23, type: 'LEMON', sym: '🍋', multi: 15 }
-    ];
+    <script>
+        const items = [
+            { id: 0, type: 'BAR', sym: '🏆', multi: 100 },
+            { id: 1, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 2, type: 'ORANGE', sym: '🍊', multi: 10 },
+            { id: 3, type: 'LEMON', sym: '🍋', multi: 15 },
+            { id: 4, type: '77', sym: '💎', multi: 40 },
+            { id: 5, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 6, type: 'ORANGE', sym: '🍊', multi: 10 },
+            { id: 7, type: 'BELL', sym: '🔔', multi: 20 },
+            { id: 8, type: 'STAR', sym: '⭐', multi: 30 },
+            { id: 9, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 10, type: 'MELON', sym: '🍉', multi: 20 },
+            { id: 11, type: 'BELL', sym: '🔔', multi: 20 },
+            { id: 12, type: 'BAR', sym: '🏆', multi: 50 },
+            { id: 13, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 14, type: 'ORANGE', sym: '🍊', multi: 10 },
+            { id: 15, type: 'LEMON', sym: '🍋', multi: 15 },
+            { id: 16, type: '77', sym: '💎', multi: 40 },
+            { id: 17, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 18, type: 'ORANGE', sym: '🍊', multi: 10 },
+            { id: 19, type: 'BELL', sym: '🔔', multi: 20 },
+            { id: 20, type: 'STAR', sym: '⭐', multi: 30 },
+            { id: 21, type: 'CHERRY', sym: '🍒', multi: 5 },
+            { id: 22, type: 'MELON', sym: '🍉', multi: 20 },
+            { id: 23, type: 'LEMON', sym: '🍋', multi: 15 }
+        ];
 
-    const gridLayout = [
-        0, 1, 2, 3, 4, 5, 6,
-        23, -1, -1, -1, -1, -1, 7,
-        22, -1, -1, -1, -1, -1, 8,
-        21, -1, -1, -1, -1, -1, 9,
-        20, 19, 18, 17, 16, 15, 14
-    ];
+        const gridLayout = [
+            0, 1, 2, 3, 4, 5, 6,
+            23, -1, -1, -1, -1, -1, 7,
+            22, -1, -1, -1, -1, -1, 8,
+            21, -1, -1, -1, -1, -1, 9,
+            20, 19, 18, 17, 16, 15, 14
+        ];
 
-    let credits = 1000;
-    let bets = { BAR: 0, '77': 0, STAR: 0, MELON: 0, BELL: 0, LEMON: 0, ORANGE: 0, CHERRY: 0 };
-    let currentIndex = 0;
-    let isRunning = false;
-    let audioCtx = null;
+        let credits = 1000;
+        let bets = { BAR: 0, '77': 0, STAR: 0, MELON: 0, BELL: 0, LEMON: 0, ORANGE: 0, CHERRY: 0 };
+        let currentIndex = 0;
+        let isRunning = false;
+        let audioCtx = null;
 
-    function initAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    function playEffect(type) {
-        initAudio();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const mode = document.getElementById('sound-mode').value;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        let freq = 440;
-        let duration = 0.1;
-        let wave = 'square';
-
-        if (type === 'tick') {
-            if (mode === 'classic') { freq = 800; wave = 'square'; duration = 0.05; }
-            else if (mode === 'modern') { freq = 1200; wave = 'sine'; duration = 0.03; }
-            else { freq = 150; wave = 'sawtooth'; duration = 0.08; }
-        } else if (type === 'win') {
-            freq = 1500; wave = 'triangle'; duration = 0.6;
-            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + 0.5);
-        } else if (type === 'bet') {
-            freq = mode === 'bass' ? 300 : 700; wave = 'sine'; duration = 0.05;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
 
-        osc.type = wave;
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
+        function playEffect(type) {
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const mode = document.getElementById('sound-mode').value;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
-    function changeSoundMode() {
-        playEffect('tick');
-    }
+            let freq = 440;
+            let duration = 0.1;
+            let wave = 'square';
 
-    function initGrid() {
-        const gridEl = document.getElementById('slot-grid');
-        gridEl.innerHTML = '';
-        gridLayout.forEach((val, idx) => {
-            if (val === -1) {
-                if (idx === 8) {
-                    const center = document.createElement('div');
-                    center.className = 'center-panel';
-                    center.style.gridColumn = 'span 5';
-                    center.style.gridRow = 'span 3';
-                    center.innerHTML = `
+            if (type === 'tick') {
+                if (mode === 'classic') { freq = 800; wave = 'square'; duration = 0.05; }
+                else if (mode === 'modern') { freq = 1200; wave = 'sine'; duration = 0.03; }
+                else { freq = 150; wave = 'sawtooth'; duration = 0.08; }
+            } else if (type === 'win') {
+                freq = 1500; wave = 'triangle'; duration = 0.6;
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1800, audioCtx.currentTime + 0.5);
+            } else if (type === 'bet') {
+                freq = mode === 'bass' ? 300 : 700; wave = 'sine'; duration = 0.05;
+            }
+
+            osc.type = wave;
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function changeSoundMode() {
+            playEffect('tick');
+        }
+
+        function initGrid() {
+            const gridEl = document.getElementById('slot-grid');
+            gridEl.innerHTML = '';
+            gridLayout.forEach((val, idx) => {
+                if (val === -1) {
+                    if (idx === 8) {
+                        const center = document.createElement('div');
+                        center.className = 'center-panel';
+                        center.style.gridColumn = 'span 5';
+                        center.style.gridRow = 'span 3';
+                        center.innerHTML = `
                         <div class="text-[8px] text-gray-400 mb-1">STATION</div>
                         <div id="main-screen" class="display-screen">READY</div>
                         <div class="text-[8px] text-gray-500 mt-1">LUCK X MACHINE</div>
                     `;
-                    gridEl.appendChild(center);
-                }
-            } else {
-                const item = items[val];
-                const div = document.createElement('div');
-                div.id = `slot-${val}`;
-                div.className = 'slot-item';
-                div.innerHTML = `
+                        gridEl.appendChild(center);
+                    }
+                } else {
+                    const item = items[val];
+                    const div = document.createElement('div');
+                    div.id = `slot-${val}`;
+                    div.className = 'slot-item';
+                    div.innerHTML = `
                     <span class="symbol">${item.sym}</span>
                     <span class="multiplier">x${item.multi}</span>
                 `;
-                gridEl.appendChild(div);
-            }
-        });
-        updateActiveSlot();
-    }
-
-    function updateActiveSlot() {
-        document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('active', 'win-blink'));
-        const active = document.getElementById(`slot-${currentIndex}`);
-        if (active) active.classList.add('active');
-    }
-
-    function placeBet(type) {
-        if (isRunning) return;
-        if (credits >= 10) {
-            bets[type] += 10;
-            credits -= 10; // 正確扣分
-            updateUI();
-            playEffect('bet');
-        } else {
-            document.getElementById('main-screen').innerText = 'LOW PT';
-            setTimeout(() => { if(!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 1000);
-        }
-    }
-
-    function clearBets() {
-        if (isRunning) return;
-        for (let key in bets) {
-            credits += bets[key]; // 清除時退回分數
-            bets[key] = 0;
-        }
-        updateUI();
-        playEffect('tick');
-    }
-
-    function updateUI() {
-        document.getElementById('total-credits').innerText = credits;
-        for (let key in bets) {
-            const el = document.getElementById(`bet-${key}`);
-            if (el) {
-                el.innerText = bets[key];
-                el.parentElement.classList.toggle('has-bet', bets[key] > 0);
-            }
-        }
-    }
-
-    function startGame() {
-        if (isRunning) return;
-        const totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
-        if (totalBet === 0) {
-            document.getElementById('main-screen').innerText = 'NO BET';
-            return;
-        }
-
-        isRunning = true;
-        document.getElementById('start-btn').disabled = true;
-        document.getElementById('win-display').innerText = '0';
-        document.getElementById('win-display').classList.remove('win-blink');
-        document.getElementById('main-screen').innerText = 'SPIN...';
-
-        const steps = 60 + Math.floor(Math.random() * 40);
-        let currentStep = 0;
-        let speed = 50;
-
-        function scroll() {
-            currentIndex = (currentIndex + 1) % 24;
+                    gridEl.appendChild(div);
+                }
+            });
             updateActiveSlot();
-            playEffect('tick');
-            currentStep++;
+        }
 
-            if (currentStep < steps) {
-                if (currentStep > steps - 15) speed += 30; // 減速
-                setTimeout(scroll, speed);
+        function updateActiveSlot() {
+            document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('active', 'win-blink'));
+            const active = document.getElementById(`slot-${currentIndex}`);
+            if (active) active.classList.add('active');
+        }
+
+        function placeBet(type) {
+            if (isRunning) return;
+            if (credits >= 10) {
+                bets[type] += 10;
+                credits -= 10; // 正確扣分
+                updateUI();
+                playEffect('bet');
             } else {
-                finishGame();
+                document.getElementById('main-screen').innerText = 'LOW PT';
+                setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 1000);
             }
         }
-        scroll();
-    }
 
-    function finishGame() {
-        isRunning = false;
-        document.getElementById('start-btn').disabled = false;
-        
-        const winningItem = items[currentIndex];
-        const winAmount = bets[winningItem.type] * winningItem.multi;
-        
-        if (winAmount > 0) {
-            credits += winAmount; // 正確加分
-            document.getElementById('win-display').innerText = winAmount;
-            document.getElementById('win-display').classList.add('win-blink');
-            document.getElementById(`slot-${currentIndex}`).classList.add('win-blink');
-            document.getElementById('main-screen').innerText = 'WIN!';
-            playEffect('win');
-        } else {
-            document.getElementById('main-screen').innerText = 'LOSE';
-            setTimeout(() => { if(!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 2000);
+        function clearBets() {
+            if (isRunning) return;
+            for (let key in bets) {
+                credits += bets[key]; // 清除時退回分數
+                bets[key] = 0;
+            }
+            updateUI();
+            playEffect('tick');
         }
-        
-        updateUI();
-    }
 
-    window.onload = () => {
-        initGrid();
-        updateUI();
-    };
-</script>
+        function updateUI() {
+            document.getElementById('total-credits').innerText = credits;
+            for (let key in bets) {
+                const el = document.getElementById(`bet-${key}`);
+                if (el) {
+                    el.innerText = bets[key];
+                    el.parentElement.classList.toggle('has-bet', bets[key] > 0);
+                }
+            }
+        }
+
+        function startGame() {
+            if (isRunning) return;
+            const totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
+            if (totalBet === 0) {
+                document.getElementById('main-screen').innerText = 'NO BET';
+                return;
+            }
+
+            isRunning = true;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('win-display').innerText = '0';
+            document.getElementById('win-display').classList.remove('win-blink');
+            document.getElementById('main-screen').innerText = 'SPIN...';
+
+            const steps = 60 + Math.floor(Math.random() * 40);
+            let currentStep = 0;
+            let speed = 50;
+
+            function scroll() {
+                currentIndex = (currentIndex + 1) % 24;
+                updateActiveSlot();
+                playEffect('tick');
+                currentStep++;
+
+                if (currentStep < steps) {
+                    if (currentStep > steps - 15) speed += 30; // 減速
+                    setTimeout(scroll, speed);
+                } else {
+                    finishGame();
+                }
+            }
+            scroll();
+        }
+
+        function finishGame() {
+            isRunning = false;
+            document.getElementById('start-btn').disabled = false;
+
+            const winningItem = items[currentIndex];
+            const winAmount = bets[winningItem.type] * winningItem.multi;
+
+            if (winAmount > 0) {
+                credits += winAmount; // 正確加分
+                document.getElementById('win-display').innerText = winAmount;
+                document.getElementById('win-display').classList.add('win-blink');
+                document.getElementById(`slot-${currentIndex}`).classList.add('win-blink');
+                document.getElementById('main-screen').innerText = 'WIN!';
+                playEffect('win');
+            } else {
+                document.getElementById('main-screen').innerText = 'LOSE';
+                setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 2000);
+            }
+
+            // 遊戲結束後自動清空押注
+            for (let key in bets) {
+                bets[key] = 0;
+            }
+            updateUI();
+        }
+
+        window.onload = () => {
+            initGrid();
+            updateUI();
+        };
+    </script>
 
 </body>
+
 </html>
