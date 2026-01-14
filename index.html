@@ -464,9 +464,13 @@
             if (isRunning) return;
             const totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
             if (totalBet === 0) {
-                document.getElementById('main-screen').innerText = 'NO BET';
+                document.getElementById('main-screen').innerText = 'BET!';
+                setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 1000);
                 return;
             }
+
+            // 啟動前徹底清除上局中獎特效
+            document.querySelectorAll('.slot-item').forEach(el => el.classList.remove('win-blink'));
 
             isRunning = true;
             playCount++; // 增加玩過的次數
@@ -509,12 +513,14 @@
                 document.getElementById(`slot-${currentIndex}`).classList.add('win-blink');
                 document.getElementById('main-screen').innerText = 'WIN!';
                 playEffect('win');
+                // 中獎後 3 秒恢復 READY，讓玩家知道可以進行下一局
+                setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 3000);
             } else {
                 document.getElementById('main-screen').innerText = 'LOSE';
                 setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 2000);
             }
 
-            // 遊戲結束後自動清空押注
+            // 遊戲結束後自動清空押注 (遵循使用者要求)
             for (let key in bets) {
                 bets[key] = 0;
             }
