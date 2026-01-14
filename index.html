@@ -209,11 +209,17 @@
                     <div class="text-[10px] text-gray-500">CREDITS</div>
                     <div id="total-credits" class="text-xl font-bold text-yellow-400">1000</div>
                 </div>
-                <h1 class="text-lg font-bold text-red-500 italic neon-glow">LITTLE MARY</h1>
+                <div class="text-center">
+                    <div class="text-[10px] text-gray-500">PLAYS</div>
+                    <div id="play-count" class="text-xl font-bold text-blue-400">0</div>
+                </div>
                 <div class="text-right">
                     <div class="text-[10px] text-gray-500">WIN</div>
                     <div id="win-display" class="text-xl font-bold text-green-400">0</div>
                 </div>
+            </div>
+            <div class="flex justify-center mb-2">
+                <h1 class="text-xl font-bold text-red-500 italic neon-glow">LITTLE MARY</h1>
             </div>
 
             <!-- 音效選擇 -->
@@ -277,9 +283,9 @@
 
             <!-- 主操作 -->
             <div class="flex gap-4">
-                <button id="clear-btn" onclick="clearBets()"
+                <button id="restart-btn" onclick="restartGame()"
                     class="flex-1 py-3 bg-gray-700 text-white rounded-xl font-bold main-btn">
-                    清除
+                    重新開始
                 </button>
                 <button id="start-btn" onclick="startGame()"
                     class="flex-[2] py-3 bg-red-600 text-white rounded-xl text-xl font-bold main-btn">
@@ -330,6 +336,7 @@
         ];
 
         let credits = 1000;
+        let playCount = 0;
         let bets = { BAR: 0, '77': 0, STAR: 0, MELON: 0, BELL: 0, LEMON: 0, ORANGE: 0, CHERRY: 0 };
         let currentIndex = 0;
         let isRunning = false;
@@ -427,18 +434,23 @@
             }
         }
 
-        function clearBets() {
+        function restartGame() {
             if (isRunning) return;
+            credits = 1000;
+            playCount = 0;
             for (let key in bets) {
-                credits += bets[key]; // 清除時退回分數
                 bets[key] = 0;
             }
+            document.getElementById('win-display').innerText = '0';
+            document.getElementById('main-screen').innerText = 'RESTART';
             updateUI();
             playEffect('tick');
+            setTimeout(() => { if (!isRunning) document.getElementById('main-screen').innerText = 'READY'; }, 1000);
         }
 
         function updateUI() {
             document.getElementById('total-credits').innerText = credits;
+            document.getElementById('play-count').innerText = playCount;
             for (let key in bets) {
                 const el = document.getElementById(`bet-${key}`);
                 if (el) {
@@ -457,6 +469,7 @@
             }
 
             isRunning = true;
+            playCount++; // 增加玩過的次數
             document.getElementById('start-btn').disabled = true;
             document.getElementById('win-display').innerText = '0';
             document.getElementById('win-display').classList.remove('win-blink');
